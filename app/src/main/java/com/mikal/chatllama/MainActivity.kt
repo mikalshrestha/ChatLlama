@@ -47,42 +47,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun makeApiCall1() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5000/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        apiService = retrofit.create(ApiService::class.java)
-
-        val post = ChatModelRequest(500, inputEditText.text.toString(), "Researchers")
-        apiService.createPost(post).enqueue(object : Callback<ChatModelResponse> {
-            override fun onResponse(
-                call: Call<ChatModelResponse>,
-                response: Response<ChatModelResponse>
-            ) {
-                progressDialog.dismiss()
-                inputEditText.text?.clear()
-                if (response.isSuccessful) {
-                    val createdPost = response.body()
-                    createdPost?.let {
-                        responseTextview.text = it.response
-                    }
-                    print("response is:::::" + createdPost)
-                } else {
-                    Log.e("API Error", "Failed.....")
-                    print("failed  response is:::::" + response.body())
-                }
-            }
-
-            override fun onFailure(call: Call<ChatModelResponse>, t: Throwable) {
-                progressDialog.dismiss()
-                inputEditText.text?.clear()
-                Log.e("API Error", "Failed....: ${t.message}")
-                print("failed response is:::::" + t.message)
-            }
-        })
-    }
     private fun makeApiCall() {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.MINUTES) // Set connection timeout
