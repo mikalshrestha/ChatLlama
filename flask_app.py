@@ -5,20 +5,17 @@ from langchain.llms import CTransformers
 
 app = Flask(__name__)
 
-## Function To get response from LLAma 2 model
 def getLLamaresponse(input_text, no_words, blog_style):
     llm = CTransformers(model='models/llama-2-7b-chat.ggmlv3.q2_K.bin',
                         model_type='llama',
                         config={'max_new_tokens':256,
                                 'temperature':0.01})
     
-    ## Prompt Template
     template = """{input_text}"""
     
     prompt = PromptTemplate(input_variables=["blog_style","input_text",'no_words'],
                             template=template)
     
-    ## Generate the response from the LLama 2 model
     response = llm(prompt.format(blog_style=blog_style, input_text=input_text, no_words=no_words))
     return response
 
